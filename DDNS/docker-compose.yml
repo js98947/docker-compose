@@ -1,9 +1,0 @@
-version: "3"
-services:
-  cloudflare-ddns:
-    image: oznu/cloudflare-ddns:latest
-    restart: always
-    environment:
-      - API_KEY=cewZD4ycdSNAIsZ6iG17p-PeNQKofWYyTyzRC8o1
-      - ZONE=Ithaca-Apt.com
-      - PROXIED=true
