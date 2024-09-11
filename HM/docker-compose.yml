@@ -1,0 +1,48 @@
+version: '3.8' # Specify the docker-compose version
+
+services:
+  prometheus:
+    image: prom/prometheus:latest # Prometheus image
+    container_name: prometheus
+    volumes:
+      - prometheus_data:/prometheus # Volume for persistent storage
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml # Prometheus configuration file
+    ports:
+      - "9090:9090" # Expose Prometheus on port 9090
+    networks:
+      - monitoring
+
+  grafana:
+    image: grafana/grafana:latest # Grafana image
+    container_name: grafana
+    volumes:
+      - grafana_data:/var/lib/grafana # Volume for persistent storage
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin # Default admin password for Grafana
+    ports:
+      - "3000:3000" # Expose Grafana on port 3000
+    networks:
+      - monitoring
+
+  node_exporter:
+    image: prom/node-exporter:latest # Node Exporter image
+    container_name: node_exporter
+    ports:
+      - "9100:9100" # Expose Node Exporter on port 9100
+    networks:
+      - monitoring
+
+networks:
+  monitoring:
+    driver: bridge # Use bridge network driver
+
+volumes:
+  prometheus_data: # Volume for Prometheus data
+  grafana_data: # Volume for Grafana data
+
+# Instructions:
+# 1. Create a prometheus.yml configuration file in the same directory as this docker-compose.yml file.
+# 2. Ensure the prometheus.yml file has the necessary configurations for your Prometheus setup.
+# 3. Run `docker-compose up -d` to start all the services in detached mode.
+# 4. Access Prometheus at http://localhost:9090, Grafana at http://localhost:3000 (default username: admin, password: admin), and Node Exporter metrics at http://localhost:9100/metrics.
+
